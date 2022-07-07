@@ -14,6 +14,28 @@ class Character():
         self.items = []
         self.defense = {"Melee": 0, "Range": 0}
 
+    def get_stats(self):
+        """Returns the stats dictionary"""
+        return self.stats
+
+    def set_stats(self, stats={}):
+        """Set stat values
+
+        stats: Should be dictionary."""
+        self.stats = stats
+
+    def get_wounds(self):
+        """Returns the wound threshold of character"""
+        return self.wounds
+
+    def set_wounds(self, wounds=0):
+        """Sets the wounds threshold value of a character.
+        wounds: has to be integer"""
+        try:
+            self.wounds = int(wounds)
+        except ValueError:
+            print("wound value must be integer")
+
 class PlayerCharacter(Character):
     """Model of a player character in Genesys RPG"""
 
@@ -23,13 +45,14 @@ class PlayerCharacter(Character):
         self.strain = 0
         self.species = ""
         self.career = ""
-        self.experience = 0
+        self.current_experience = 0
+        self.total_experience = 0
 
     def increase_stat(self, stat):
         """Increase one stat/characteristic of a character, and reduce their xp accordingly."""
         if self.stats[stat] < 5:
             self.stats[stat] += 1
-            self.experience -= (self.stats[stat] + 1) * 10
+            self.current_experience -= (self.stats[stat] + 1) * 10
         else:
             raise ValueError("Cannot raise characteristic over 5")
 
@@ -46,11 +69,11 @@ class PlayerCharacter(Character):
         if self.skills[skill] < 5:
             self.skills[skill] += 1
             # If skill is career skill, experience cost is rank x 5
-            if self.skills[skill] and self.skills[]:
-                self.experience -= (self.skills[skill] + 1) * 5
+            if self.skills[skill]:
+                self.current_experience -= (self.skills[skill] + 1) * 5
             # If skill is not career skill, experience cost is rank x 5 + 5
             else:
-                self.experience -= ((self.skills[skill] + 1) * 5) + 5
+                self.current_experience -= ((self.skills[skill] + 1) * 5) + 5
         else:
             raise ValueError("Cannot raise skill rank over 5")
 
